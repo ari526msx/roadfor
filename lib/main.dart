@@ -20,37 +20,60 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(appTitle),
-        ),
-        body: Container(
-          width: double.infinity,
-          child: Container(
-            child:GridView.count(
-              crossAxisCount: 3,
-              // Generate 100 widgets that display their index in the List.
-              children: List.generate(100, (index) {
-                return FlatButton(
-                  child:Column(
-                    children: <Widget>[
-                      Expanded(
-                        child: Image.asset('images/usj-kohjiro-400x400.png'),
-                      ),
-                      Text(
-                        '電話番号 $index',
-                      ),
-                    ],
-                  ),
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              title: Text(appTitle),
+              floating: true,
+              flexibleSpace: Placeholder(),
+              leading: FlatButton(
+                child: Icon(Icons.menu),
+                onPressed: () {
+
+                },
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Icon(Icons.settings),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => NextPage('電話番号 $index')),
-                    );
+
                   },
-                );
-              }),
+                ),
+              ],
             ),
-          ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                  (context, index) => FlatButton(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        color: Colors.orange,
+                        child: Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                'images/usj-kohjiro-400x400.png',
+                                width: 100,
+                                height: 100,
+                              ),
+                            ),
+                            Text('電話番号 $index'),
+                          ],
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => NextPage('電話番号 $index')),
+                      );
+                    },
+                  ),
+                  childCount: 1000,
+              ),
+            ),
+          ],
         ),
     );
   }
