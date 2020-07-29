@@ -15,7 +15,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final appTitle = 'Form Validation Demo';
+  final appTitle = 'トレーニングメニュー';
   final items = List<String>.generate(10000, (i) => "電話番号 $i");
   @override
   Widget build(BuildContext context) {
@@ -23,9 +23,11 @@ class MyApp extends StatelessWidget {
         body: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
+              backgroundColor: Colors.orange,
               title: Text(appTitle),
               floating: true,
               flexibleSpace: Placeholder(),
+              expandedHeight: 200,
               leading: FlatButton(
                 child: Icon(Icons.menu),
                 onPressed: () {
