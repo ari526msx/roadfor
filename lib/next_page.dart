@@ -21,7 +21,7 @@ class NextPage extends StatelessWidget {
               child: RaisedButton(
                 child: Text('戻る'),
                 onPressed: () {
-                  Navigator.pop(context, '2ndページからの戻り値');
+                  Navigator.pop(context);
                 },
               ),
             )

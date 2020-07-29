@@ -3,89 +3,55 @@ import 'package:flutter/material.dart';
 import 'package:roadfor_app/next_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+      MaterialApp(
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: MyApp(),
+      )
+  );
 }
 
 class MyApp extends StatelessWidget {
+  final appTitle = 'Form Validation Demo';
+  final items = List<String>.generate(10000, (i) => "電話番号 $i");
   @override
   Widget build(BuildContext context) {
-    final appTitle = 'Form Validation Demo';
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      title: appTitle,
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text(appTitle),
         ),
-        body: MyHomePage(),
-      ),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  String sResult = '次のページへ';
-  final ctrlUserName = TextEditingController();
-  final ctrlMailAddr = TextEditingController();
-  @override
-  Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-    bool ret;
-    return Form(
-      key: _formKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          TextFormField(
-            autofocus: true,
-            controller: ctrlUserName,
-            decoration: InputDecoration(
-                labelText: '名前を入力してください',
-            ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'お名前は必須です。';
-              }
-              return null;
-            },
-          ),
-          TextFormField(
-            controller: ctrlMailAddr,
-            decoration: InputDecoration(
-              labelText: 'メールアドレスを入力してください',
-            ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'メールアドレスは必須です。';
-              }
-              return null;
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: RaisedButton(
-              child: Text('表示'),
-              onPressed: () {
-                  print(ctrlUserName.text + ', ' + ctrlMailAddr.text);
-                  if (ret = _formKey.currentState.validate()) {
-                    Scaffold.of(context).showSnackBar(
-                        SnackBar(content: Text(ctrlUserName.text + ', ' + ctrlMailAddr.text))
+        body: Container(
+          width: double.infinity,
+          child: Container(
+            child:GridView.count(
+              crossAxisCount: 3,
+              // Generate 100 widgets that display their index in the List.
+              children: List.generate(100, (index) {
+                return FlatButton(
+                  child:Column(
+                    children: <Widget>[
+                      Expanded(
+                        child: Image.asset('images/usj-kohjiro-400x400.png'),
+                      ),
+                      Text(
+                        '電話番号 $index',
+                      ),
+                    ],
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => NextPage('電話番号 $index')),
                     );
-                  }
-              },
+                  },
+                );
+              }),
             ),
           ),
-        ],
-      ),
+        ),
     );
   }
 }
