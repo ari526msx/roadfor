@@ -9,62 +9,82 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final appTitle = 'Form Validation Demo';
     return MaterialApp(
-      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter 練習用ページ'),
+      title: appTitle,
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(appTitle),
+        ),
+        body: MyHomePage(),
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   String sResult = '次のページへ';
-
+  final ctrlUserName = TextEditingController();
+  final ctrlMailAddr = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: <Widget>[
-          Icon(
-            Icons.favorite,
-            color: Colors.pink,
-            size: 24.0,
-            semanticLabel: 'Text to announce in accessibility modes',
+    final _formKey = GlobalKey<FormState>();
+    bool ret;
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          TextFormField(
+            autofocus: true,
+            controller: ctrlUserName,
+            decoration: InputDecoration(
+                labelText: '名前を入力してください',
+            ),
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'お名前は必須です。';
+              }
+              return null;
+            },
           ),
-        ],
-      ),
-      body: Container(
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Image.asset('images/usj-kohjiro-400x400.png'),
-            RaisedButton(
-              child: Text(sResult),
-              onPressed: () async {
-                final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => NextPage('1ページ目から渡した文字列')),
-                );
-                sResult = result;
-                print(sResult);
+          TextFormField(
+            controller: ctrlMailAddr,
+            decoration: InputDecoration(
+              labelText: 'メールアドレスを入力してください',
+            ),
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'メールアドレスは必須です。';
+              }
+              return null;
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: RaisedButton(
+              child: Text('表示'),
+              onPressed: () {
+                  print(ctrlUserName.text + ', ' + ctrlMailAddr.text);
+                  if (ret = _formKey.currentState.validate()) {
+                    Scaffold.of(context).showSnackBar(
+                        SnackBar(content: Text(ctrlUserName.text + ', ' + ctrlMailAddr.text))
+                    );
+                  }
               },
             ),
-          ],
-        )
+          ),
+        ],
       ),
     );
   }
